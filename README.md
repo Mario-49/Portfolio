@@ -1,4 +1,4 @@
-# Aspiring Data Analyst
+# Mario Alberto Leon
 
 #### Technical Skills: R, SAS, Python, SQL, MATLAB, Tableau, Excel
 #### Languages: English, Spanish
