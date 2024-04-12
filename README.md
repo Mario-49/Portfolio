@@ -18,4 +18,6 @@
 
 ### Projects
 
-
+1. [Analyzing Major League Baseball Regular Season](https://github.com/Mario-49/Portfolio/blob/main/STAT_510_Final_Report.pdf)
+2. [Analyzing the Major League Baseball Playoffs Using Multivariate Statistics in SAS]
+3. 
