@@ -10,7 +10,7 @@
 
 ### Work Experience
 **Statistician @ Genius Sports (_November 2023 - Present_)**
-- Reported and collected live data during the American Hockey League season primarily for Ontario Reign home games
+- Flawlessly reported and collected live data for NCAA Volleyball and American Hockey League matches, primarily for Ontario Reign home games
 
 **Instructional Student Assistant @ California State University, Long Beach (_August 2021 - May 2023_)**
 - Assisted university students in advanced levels of mathematics and statistics
