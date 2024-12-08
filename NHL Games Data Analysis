@@ -1,3 +1,4 @@
+Coded in R using the NHLgames.csv and team_info.csv
 library(readr)
 library(dplyr)
 library(lubridate)
@@ -27,23 +28,16 @@ games_csv1 <- inner_join(game_csv, team_info, by = "team_id")
 names(games_csv1)[names(games_csv1) == "home_team_id"] <- "team_id"
 games_csv1 <- games_csv1[-5]
 
-
-```{r}
 games_csv2 <- inner_join(games_csv1, team_info, by = "team_id")
-```
+
 
 Now to clean up the data!
 
-```{r}
 NHLgames <- games_csv2[-c(5, 15, 19, 20, 24)]
 NHLgames <- NHLgames[-10]
-```
 
-```{r}
 names(NHLgames)
-```
 
-```{r}
 names(NHLgames)[names(NHLgames) == "shortName.x"] <- "Away_City"
 names(NHLgames)[names(NHLgames) == "teamName.x"] <- "Away_Team"
 names(NHLgames)[names(NHLgames) == "abbreviation.x"] <- "Away_Code"
@@ -51,20 +45,13 @@ names(NHLgames)[names(NHLgames) == "shortName.y"] <- "Home_City"
 names(NHLgames)[names(NHLgames) == "teamName.y"] <- "Home_Team"
 names(NHLgames)[names(NHLgames) == "abbreviation.y"] <- "Home_Code"
 
-```
-
-```{r}
 names(NHLgames)
-```
 
 Sort by date!
-```{r}
-NHLgames <- NHLgames[order(as.Date(NHLgames$date_time)),]
-```
 
-```{r}
+NHLgames <- NHLgames[order(as.Date(NHLgames$date_time)),]
+
 str(NHLgames)
-```
 
 Now our data is ready to go!
 
@@ -72,10 +59,28 @@ head(NHLgames)
 
 I want to extract the month of each date first:
 
-
 month <- month(NHLgames$date_time)
 year <- year(NHLgames$date_time)
 NHLgames <- cbind(NHLgames, month, year)
+
+Adding variable for total goals and point differential
+NHLgames$total_goals <- NHLgames$away_goals + NHLgames$home_goals
+NHLgames$point_diff <- NHLgames$home_goals - NHLgames$away_goals
+
+
+I will even filter to only look at my favorite team, the Anaheim Ducks:
+
+NHLDucks <- NHLgames %>% filter(Away_Team == "Ducks" | Home_Team == "Ducks")
+
+
+
+
+
+
+
+
+
+
 
 
 
