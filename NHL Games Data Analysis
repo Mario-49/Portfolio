@@ -1,0 +1,85 @@
+library(readr)
+library(dplyr)
+library(lubridate)
+library(ggplot2)
+
+
+Importing the NHL game data:
+
+game_csv <- read_csv("~/Downloads/game.csv.zip")
+#View(game_csv)
+
+
+Importing team name data:
+
+team_info <- read_csv("~/Downloads/team_info.csv")
+#View(team_info)
+
+
+Renaming some variables: 
+
+names(game_csv)[names(game_csv) == "away_team_id"] <- "team_id"
+#names(game_csv)[names(game_csv) == "home_team_id"] <- "team_id"
+
+
+games_csv1 <- inner_join(game_csv, team_info, by = "team_id")
+
+names(games_csv1)[names(games_csv1) == "home_team_id"] <- "team_id"
+games_csv1 <- games_csv1[-5]
+
+
+```{r}
+games_csv2 <- inner_join(games_csv1, team_info, by = "team_id")
+```
+
+Now to clean up the data!
+
+```{r}
+NHLgames <- games_csv2[-c(5, 15, 19, 20, 24)]
+NHLgames <- NHLgames[-10]
+```
+
+```{r}
+names(NHLgames)
+```
+
+```{r}
+names(NHLgames)[names(NHLgames) == "shortName.x"] <- "Away_City"
+names(NHLgames)[names(NHLgames) == "teamName.x"] <- "Away_Team"
+names(NHLgames)[names(NHLgames) == "abbreviation.x"] <- "Away_Code"
+names(NHLgames)[names(NHLgames) == "shortName.y"] <- "Home_City"
+names(NHLgames)[names(NHLgames) == "teamName.y"] <- "Home_Team"
+names(NHLgames)[names(NHLgames) == "abbreviation.y"] <- "Home_Code"
+
+```
+
+```{r}
+names(NHLgames)
+```
+
+Sort by date!
+```{r}
+NHLgames <- NHLgames[order(as.Date(NHLgames$date_time)),]
+```
+
+```{r}
+str(NHLgames)
+```
+
+Now our data is ready to go!
+
+head(NHLgames)
+
+I want to extract the month of each date first:
+
+
+month <- month(NHLgames$date_time)
+year <- year(NHLgames$date_time)
+NHLgames <- cbind(NHLgames, month, year)
+
+
+
+Exporting the data in case I decide to work on it again:
+
+write_csv(NHLgames, file = "NHLgames.csv")
+
