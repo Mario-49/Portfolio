@@ -1,0 +1,167 @@
+---
+title: "R Notebook"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+
+```{r, results = 'hide', echo=FALSE}
+library(dplyr)
+library(tibble)
+library(lubridate)
+library(ggplot2)
+library(scales)
+```
+
+```{r, results='hide', echo=FALSE}
+library(readxl)
+sportsref_download_6_ <- read_excel("Desktop/sportsref_download (6).xlsx")
+AngelsAttendance <- sportsref_download_6_
+#View(sportsref_download_6_)   
+```
+
+
+```{r}
+names(AngelsAttendance)
+```
+
+
+First I will create a new variable that shows the winning percentage:
+```{r}
+AngelsAttendance <- AngelsAttendance %>%
+  mutate(WinPerc = round(W /(W + L), 2))
+```
+
+Replace NAs in Playoffs with "Missed Playoffs"
+```{r}
+AngelsAttendance$Playoffs[is.na(AngelsAttendance$Playoffs)] <- "Missed Playoffs"
+```
+
+We already know there was no attendance in 2020 due to the COVID-19 pandemic so we will ignore that season and also 2021 since a full crowd was not present until 2022.
+
+2022-2025
+```{r}
+AngelsAtt2022to2025 <- AngelsAttendance %>% filter(Year %in% (2022:2025))
+```
+
+
+Every season after the 2014 playoff appearance
+
+```{r}
+LAAattafterplayoffs <- AngelsAttendance %>% filter(Year >= 2014)
+```
+
+Excluding the COVID seasons
+```{r}
+AngelsAttNOCOVID <- AngelsAttendance %>% filter(!Year %in% c(2020, 2021))
+LAAAttPlayoffsNoCOVID <- LAAattafterplayoffs %>% filter(!Year %in% c(2020, 2021))
+```
+
+This line graph shows that the Angels are currently performing their franchise worst.
+
+```{r}
+ggplot(AngelsAttendance, aes(x = Year, y = WinPerc)) +
+  geom_line() +
+  labs(title = "Win Percentage by Year", x = "Year", y = "Win Percentage") +
+  theme_minimal()
+```
+
+
+
+
+I will use the data excluding 2020 and 2021 since attendance figures were low during those years:
+
+```{r}
+ggplot(LAAAttPlayoffsNoCOVID, aes(x = Year, y = Attendance)) +
+  geom_line() +
+  labs(title = "Attendance by Year", x = "Year", y = "Total Attendance") +
+  theme_minimal()
+```
+
+
+```{r}
+ggplot(LAAAttPlayoffsNoCOVID, aes(x = factor(Year), y = Attendance)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  geom_line(aes(y = WinPerc*max(Attendance), group = 1), color = "red", linewidth = 1.2) +
+  labs(x = "Year", y = "Total Attendance") +
+  scale_y_continuous(labels = comma) +
+  theme_minimal()
+```
+
+```{r}
+LAAAttPlayoffsNoCOVID$win_group <- cut(
+  LAAAttPlayoffsNoCOVID$W,
+  breaks = c(60, 70, 80, 90, 110),
+  labels = c("60-69", "70-79", "80-89", "90-110"),
+  right = FALSE
+)
+```
+
+```{r}
+AngelsAttNOCOVID$win_group <- cut(
+  AngelsAttNOCOVID$W,
+  breaks = c(60, 70, 80, 90, 110),
+  labels = c("60-69", "70-79", "80-89", "90-110"),
+  right = FALSE
+)
+```
+
+```{r}
+ggplot(LAAAttPlayoffsNoCOVID, aes(x = Year, y = Attendance, color = win_group)) +
+  geom_point(size = 5) +
+  scale_fill_manual(values = c(
+      "60-69" ="black",
+      "70-79" ="blue",
+      "80-89" ="green",
+      "90-110" ="red")) +
+labs(x = "Year", y = "Total Attendance", color = "Wins", title = "Angels Attendance (Winning Percentage) by Year") +
+theme_minimal()
+```
+
+Angels have never lost 100 games. The NAs are the 1981 and 1994 seasons, which were shortened.
+```{r}
+ggplot(AngelsAttNOCOVID, aes(x = Year, y = Attendance, color = win_group)) +
+  geom_point() +
+ scale_fill_manual(values = c(
+      "60-69" ="black",
+      "70-79" ="blue",
+      "80-89" ="green",
+      "90-110" ="red")) +
+   labs(x = "Year", y = "Total Attendance", title = "Angels Attendance (Winning Percentage) by Year") +
+    scale_y_continuous(labels = comma) +
+  theme_minimal()
+```
+
+\newpage
+
+On the side, I wanted to see how many wins the Angels were projected to win at the time I did this side project
+
+July 10, 2026: Record 36-56
+Runs Scored: 399
+Runs Allowed: 457
+
+Pythagorean Expectation: W%=[(Runs Scored)^1.81]/[(Runs Scored)^1.81 + (Runs Allowed)^1.81]
+
+```{r}
+PE = (399^1.81)/(399^1.81+457^1.81)
+PE*162
+```
+
+projected_wins <- current_wins + (remaining_games * current_win_pct)
+```{r}
+ProjectedWins <- 36 + (70 * .391)
+ProjectedWins
+```
+
+```{r}
+36 + 70*PE
+```
+
+
+
+
