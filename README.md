@@ -10,7 +10,7 @@
 
 ### Work Experience
 
-**Mathematics Impact Substitute Teacher**
+**Mathematics Impact Substitute Teacher (_April 2025 - Present_)**
 - Adapted daily to diverse environments, provided instructional support in the absence of the regular classroom teacher, assisted in various levels of math and proctored numerous vital examinations
 
 **Statistician @ Genius Sports (_November 2023 - Present_)**
