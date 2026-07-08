@@ -9,6 +9,10 @@
 - Google Advanced Data Analytics Certification (_February 2024_)
 
 ### Work Experience
+
+**Mathematics Impact Substitute Teacher
+- Adapted daily to diverse environments, provided instructional support in the absence of the regular classroom teacher, assisted in various levels of math and proctored numerous vital examinations
+
 **Statistician @ Genius Sports (_November 2023 - Present_)**
 - Flawlessly reported and collected live data for NCAA Volleyball and American Hockey League matches, primarily for Ontario Reign home games
 
